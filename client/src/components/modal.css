@@ -1,0 +1,16 @@
+.contenedor__over {
+    width: 100vh;
+    height: 100hv;
+    background-color: rgba(0, 0, 0, 0.238);
+    position: absolute;
+}
+
+.contenedor__modal {
+    width: 500px;
+    height: 700px;
+    background-color: rgb(246, 235, 235);
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50% -50%);
+}
