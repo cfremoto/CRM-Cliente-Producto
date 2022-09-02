@@ -12,6 +12,7 @@ const Clinetes = () => {
 
   const [clientesState, setClientesState] = useState([])
   const [clientesFiltrados, setClientesFiltrados] = useState([])
+  const [openBuscarClientes, setOpenBuscarClientes] = useState(false)
   const [buscar, setBuscar] = useState('')
 
   const actualizarFiltrado = e => {
@@ -28,7 +29,7 @@ const Clinetes = () => {
   useEffect(() => {
     clientes()
   }, [])
-  console.log(buscar)
+
   return (
     <>
       <h2>Clientes</h2>
@@ -38,12 +39,22 @@ const Clinetes = () => {
         Nuevo Cliente
       </Link>
 
-      <FormularionBuscarClientes
-        buscar={buscar}
-        setBuscar={setBuscar}
-        actualizarFiltrado={actualizarFiltrado}
-        setClientesFiltrados={setClientesFiltrados}
-      />
+      <Link
+        to='#'
+        className='btn btn-naranja nvo-cliente mleft'
+        onClick={() => setOpenBuscarClientes(!openBuscarClientes)}
+      >
+        <i className='fas fa-search' />
+        Buscar Cliente
+      </Link>
+
+      {openBuscarClientes &&
+        <FormularionBuscarClientes
+          buscar={buscar}
+          setBuscar={setBuscar}
+          actualizarFiltrado={actualizarFiltrado}
+          setClientesFiltrados={setClientesFiltrados}
+        />}
 
       <ul className='listado-clientes'>
         {

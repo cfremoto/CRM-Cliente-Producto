@@ -1,4 +1,5 @@
 require('dotenv').config()
+require('colors')
 const express = require('express')
 const app = express()
 
@@ -15,5 +16,5 @@ app.use('/', router)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
-    console.log(`Server runing on PORT: ${PORT}`)
+    console.log(`Server runing on PORT: ${PORT}`.bgCyan.blue.bold)
 })

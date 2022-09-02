@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import Modal from '../components/Modal'
+import { useParams } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import ClienteAxios from '../Utils/ClienteAxios'
 import FormularioBuscarProductos from './FormularioBuscarProducto'
 import FormularioCantidadProductos from './FormularioCantidadProductos'
 
 const NuevoPedido = () => {
-  const navigate = useNavigate()
   const { rif } = useParams()
 
   const [cliente, setCliente] = useState({})
   const [buscar, setBuscar] = useState('')
   const [productos, setProductos] = useState([])
   const [isOpen, setIsOpen] = useState(false)
+  const [total, setTotal] = useState(0)
 
   const consulApiCliente = async () => {
     const { data } = await ClienteAxios.get(`/clientes/${rif}`)
@@ -28,7 +28,11 @@ const NuevoPedido = () => {
       productosResultado.cantidad = 0
       setProductos([...productos, productosResultado])
     } else {
-      alert('No se encontraron productos')
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong!'
+      })
     }
 
     setBuscar('')
@@ -38,14 +42,39 @@ const NuevoPedido = () => {
     setBuscar(e.target.value)
   }
 
+  const modificarCantidadProductos = (i, value) => {
+    const allProducts = [...productos]
+    if (value === 'i') {
+      if (allProducts[i].cantidad === 0) return
+      allProducts[i].cantidad -= 1
+    } else {
+      allProducts[i].cantidad += 1
+    }
+
+    setProductos(allProducts)
+  }
+
+  const actualizarTotal = () => {
+    if (productos.length === 0) {
+      setTotal(0)
+      return
+    }
+
+    let newTotal = 0
+    productos.map(item => (newTotal += (item.cantidad * item.precio)))
+
+    setTotal(newTotal)
+  }
+
   const createPedido = () => {
 
   }
 
   useEffect(() => {
     consulApiCliente()
-  }, [])
-  console.log(productos)
+    actualizarTotal()
+  }, [productos])
+
   return (
     <>
       <h2>Nuevo Pedido</h2>
@@ -57,7 +86,7 @@ const NuevoPedido = () => {
       </div>
       <button
         className='btn btn-verde nvo-cliente'
-        onClick={(e) => setIsOpen(true)}
+        onClick={(e) => setIsOpen(!isOpen)}
       >
         <i className='fas fa-plus-circle' />
         Agregar Productos
@@ -65,19 +94,22 @@ const NuevoPedido = () => {
 
       {
         isOpen &&
-          <Modal>
-            <FormularioBuscarProductos
-              buscarProductos={buscarProductos}
-              leerDatosBusqueda={leerDatosBusqueda}
-              setIsOpen={setIsOpen}
-            />
-          </Modal>
+          <FormularioBuscarProductos
+            buscarProductos={buscarProductos}
+            leerDatosBusqueda={leerDatosBusqueda}
+            setIsOpen={setIsOpen}
+          />
       }
 
       <ul className='resumen'>
         {
-          productos.map(producto => (
-            <FormularioCantidadProductos key={producto._id} producto={producto} />
+          productos.map((producto, i) => (
+            <FormularioCantidadProductos
+              key={producto._id}
+              producto={producto}
+              i={i}
+              modificarCantidadProductos={modificarCantidadProductos}
+            />
           ))
         }
       </ul>
@@ -90,14 +122,18 @@ const NuevoPedido = () => {
               <input type='number' name='precio' placeholder='Precio' readonly='readonly' />
             </div>
 
-            <div className='enviar'>
-              <input
-                type='submit'
-                class='btn btn-azul'
-                value='Agregar Pedido'
-                onClick={createPedido}
-              />
-            </div>
+            <p className='total'>Total a pagar: $ {total}</p>
+
+            {total > 0
+              ? <div className='enviar'>
+                <input
+                  type='submit'
+                  className='btn btn-azul'
+                  value='Agregar Pedido'
+                  onClick={createPedido}
+                />
+              </div>
+              : null}
           </>
       }
 

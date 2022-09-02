@@ -1,5 +1,5 @@
 
-const FormularioCantidadProductos = ({ producto }) => {
+const FormularioCantidadProductos = ({ producto, i, modificarCantidadProductos }) => {
   const { descripcion, modelo, precio } = producto[0]
   return (
     <>
@@ -11,12 +11,20 @@ const FormularioCantidadProductos = ({ producto }) => {
         </div>
         <div className='acciones'>
           <div className='contenedor-cantidad'>
-            <i className='fas fa-minus' />
-            <input type='text' name='cantidad' />
-            <i className='fas fa-plus' />
+            <i
+              className='fas fa-minus'
+              onClick={() => modificarCantidadProductos(i, 'i')}
+            />
+            <p>{producto.cantidad}</p>
+            <i
+              className='fas fa-plus'
+              onClick={() => modificarCantidadProductos(i, 'd')}
+            />
           </div>
           <button type='button' className='btn btn-rojo'>
-            <i className='fas fa-minus-circle' />
+            <i
+              className='fas fa-minus-circle'
+            />
             Eliminar Producto
           </button>
         </div>

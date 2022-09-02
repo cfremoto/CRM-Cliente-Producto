@@ -73,6 +73,11 @@ h2 {
 .btn:hover {
     cursor: pointer;
 }
+
+.mleft{
+    margin-left: 1rem;
+}
+
 @media (min-width: 768px) {
     .btn {
         display: inline-block;
@@ -415,23 +420,6 @@ form .campo input[readonly] {
     padding: 1rem;
 }
 
-/** AJUSTES SWEETALERT**/
-.swal2-popup  .swal2-title {
-    font-size: 3rem!important;
-}
-.swal2-popup #swal2-content {
-    font-size: 2rem;
-}
-.swal2-confirm,
-.swal2-cancel {
-    font-size: 2rem!important;
-    padding: 1rem 3rem;
-}
-.swal2-popup.swal2-modal{
-    padding: 4rem;
-    width: 60rem;
-}
-
 .ficha-cliente {
     background-color: var(--grisClaro);
     padding: 1rem 4rem;
@@ -461,7 +449,4 @@ h3.resumen-titulo {
 }
 .login h2 {
     text-align: center;
-}
-.login .contenedor-formulario {
-
 }
